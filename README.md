@@ -1,12 +1,6 @@
-# Skivback FM v3
+# Skivback FM v3.2
 
-Statisk webbradio för GitHub Pages.
+Testversion med originalstilade GTA-radiologotyper från Logopedia/Fandom när de är tillgängliga.
+Lokala SVG-logotyper används automatiskt som reserv om en extern bild inte kan laddas.
 
-## Nytt i v3
-- Kompakt helskärmsläge i landscape
-- Rullbar ikonlista med lokala stationsmärken
-- Stor logotyp för vald station
-- Dold YouTube-spelare
-- Responsiv portrait-layout
-
-De medföljande SVG-märkena är egenritade, GTA-inspirerade platshållare och inte officiella Rockstar-logotyper.
+Lägg innehållet direkt i repositoryts rot för GitHub Pages.

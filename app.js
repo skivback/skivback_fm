@@ -24,11 +24,50 @@ const stations=[
 {index:22,name:"MOTOMAMI LOS SANTOS",frequency:"97.8",videoId:"30uA_Hppzpc",logo:"motomami.svg"},
 {index:23,name:"BLONDED LOS SANTOS",frequency:"104.6",videoId:"-tVumJBaTWY",logo:"blonded.svg"}
 ];
+
+// Original-style station artwork loaded from Logopedia/Fandom when available.
+// Every image has a local SVG fallback so the app still works if a remote file changes.
+const remoteLogos = {
+  "space-103-2.svg": "https://logos.fandom.com/wiki/Special:Redirect/file/Space_103.2.svg",
+  "non-stop-pop.svg": "https://logos.fandom.com/wiki/Special:Redirect/file/Non-Stop-Pop_FM.svg",
+  "radio-los-santos.svg": "https://logos.fandom.com/wiki/Special:Redirect/file/Radio_Los_Santos.svg",
+  "west-coast-classics.svg": "https://logos.fandom.com/wiki/Special:Redirect/file/West_Coast_Classics.svg",
+  "rebel-radio.svg": "https://logos.fandom.com/wiki/Special:Redirect/file/Rebel_Radio.svg",
+  "the-lowdown.svg": "https://logos.fandom.com/wiki/Special:Redirect/file/The_Low_Down_91.1.svg",
+  "blue-ark.svg": "https://logos.fandom.com/wiki/Special:Redirect/file/The_Blue_Ark.svg",
+  "worldwide-fm.svg": "https://logos.fandom.com/wiki/Special:Redirect/file/Worldwide_FM.svg",
+  "east-los-fm.svg": "https://logos.fandom.com/wiki/Special:Redirect/file/East_Los_FM.svg",
+  "channel-x.svg": "https://logos.fandom.com/wiki/Special:Redirect/file/Channel_X.svg",
+  "radio-mirror-park.svg": "https://logos.fandom.com/wiki/Special:Redirect/file/Radio_Mirror_Park.svg",
+  "soulwax-fm.svg": "https://logos.fandom.com/wiki/Special:Redirect/file/Soulwax_FM.svg",
+  "flylo-fm.svg": "https://logos.fandom.com/wiki/Special:Redirect/file/FlyLo_FM.svg",
+  "vinewood-boulevard.svg": "https://logos.fandom.com/wiki/Special:Redirect/file/Vinewood_Boulevard_Radio.svg",
+  "los-santos-underground.svg": "https://logos.fandom.com/wiki/Special:Redirect/file/Los_Santos_Underground_Radio.svg",
+  "kult-fm.svg": "https://logos.fandom.com/wiki/Special:Redirect/file/Kult_99.1_FM.svg",
+  "still-slipping.svg": "https://logos.fandom.com/wiki/Special:Redirect/file/Still_Slipping_Los_Santos.svg",
+  "music-locker.svg": "https://logos.fandom.com/wiki/Special:Redirect/file/Music_Locker_Radio.svg",
+  "motomami.svg": "https://logos.fandom.com/wiki/Special:Redirect/file/Motomami_Los_Santos.svg",
+  "media-player.svg": "https://logos.fandom.com/wiki/Special:Redirect/file/Media_Player_(Grand_Theft_Auto).svg",
+  "blonded.svg": "https://logos.fandom.com/wiki/Special:Redirect/file/Blonded_Los_Santos_97.8_FM.svg"
+};
+
+const localLogo = logo => `assets/logos/${logo}`;
+const preferredLogo = logo => remoteLogos[logo] || localLogo(logo);
+function setLogoImage(img, logo, alt = "") {
+  img.alt = alt;
+  img.dataset.fallback = localLogo(logo);
+  img.onerror = () => {
+    img.onerror = null;
+    img.src = img.dataset.fallback;
+  };
+  img.src = preferredLogo(logo);
+}
+
 let player,currentStationIndex=0,progressTimer=null,userSeeking=false;
 const $=s=>document.querySelector(s),stationList=$("#station-list"),currentStation=$("#current-station"),currentTrack=$("#current-track"),frequency=$("#frequency"),stationLogo=$("#station-logo"),playPause=$("#play-pause"),progress=$("#progress"),currentTime=$("#current-time"),duration=$("#duration"),volume=$("#volume"),muteButton=$("#mute");
 const formatTime=s=>{if(!Number.isFinite(s)||s<0)return"00:00";const m=Math.floor(s/60),sec=Math.floor(s%60);return`${String(m).padStart(2,"0")}:${String(sec).padStart(2,"0")}`};
-function renderStationList(){stationList.replaceChildren();stations.forEach((s,i)=>{const b=document.createElement("button");b.type="button";b.className="station-button";b.title=s.name;b.setAttribute("aria-label",s.name);const img=document.createElement("img");img.src=`assets/logos/${s.logo}`;img.alt="";const text=document.createElement("span");text.textContent=s.name;b.append(img,text);b.addEventListener("click",()=>loadStation(i));stationList.appendChild(b)});updateActiveStation()}
-function updateActiveStation(){const s=stations[currentStationIndex];document.querySelectorAll(".station-button").forEach((b,i)=>{b.classList.toggle("active",i===currentStationIndex);if(i===currentStationIndex)b.scrollIntoView({block:"nearest",behavior:"smooth"})});currentStation.textContent=s.name;frequency.textContent=s.frequency;stationLogo.src=`assets/logos/${s.logo}`;stationLogo.alt=s.name;currentTrack.textContent="GTA RADIO — FULL STATION";document.title=`${s.name} · Skivback FM`}
+function renderStationList(){stationList.replaceChildren();stations.forEach((s,i)=>{const b=document.createElement("button");b.type="button";b.className="station-button";b.title=s.name;b.setAttribute("aria-label",s.name);const img=document.createElement("img");setLogoImage(img,s.logo,"");const text=document.createElement("span");text.textContent=s.name;b.append(img,text);b.addEventListener("click",()=>loadStation(i));stationList.appendChild(b)});updateActiveStation()}
+function updateActiveStation(){const s=stations[currentStationIndex];document.querySelectorAll(".station-button").forEach((b,i)=>{b.classList.toggle("active",i===currentStationIndex);if(i===currentStationIndex)b.scrollIntoView({block:"nearest",behavior:"smooth"})});currentStation.textContent=s.name;frequency.textContent=s.frequency;setLogoImage(stationLogo,s.logo,s.name);currentTrack.textContent="GTA RADIO — FULL STATION";document.title=`${s.name} · Skivback FM`}
 function loadStation(i){currentStationIndex=(i+stations.length)%stations.length;const s=stations[currentStationIndex];updateActiveStation();if(!player||typeof player.loadVideoById!=="function")return;player.loadVideoById({videoId:s.videoId,startSeconds:s.startSeconds??0})}
 function updateProgress(){if(!player||userSeeking)return;const e=player.getCurrentTime?.()??0,t=player.getDuration?.()??0;currentTime.textContent=formatTime(e);duration.textContent=formatTime(t);progress.value=t>0?String(e/t*100):"0"}
 window.onYouTubeIframeAPIReady=function(){const s=stations[0];player=new YT.Player("youtube-player",{width:"1",height:"1",videoId:s.videoId,playerVars:{playsinline:1,rel:0,start:s.startSeconds??0},events:{onReady:e=>{e.target.setVolume(Number(volume.value));progressTimer=setInterval(updateProgress,500)},onStateChange:e=>{playPause.textContent=e.data===YT.PlayerState.PLAYING?"PAUSE":"PLAY";if(e.data===YT.PlayerState.ENDED)loadStation(currentStationIndex+1)},onError:e=>currentTrack.textContent=`YouTube-fel: ${e.data}`}})};
