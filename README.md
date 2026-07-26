@@ -16,3 +16,5 @@ Ladda upp innehållet i den här mappen till repositoryts rot och välj `main` s
 ## Varumärken och innehåll
 
 Detta är ett fristående fanprojekt och är inte anslutet till eller godkänt av Rockstar Games eller Take-Two Interactive. Grand Theft Auto-relaterade namn och stationsmärken tillhör sina respektive rättighetsinnehavare. Bildmärkena används här som lokala gränssnittsresurser i en icke-officiell prototyp. Ljud och video spelas via YouTube och lagras inte i projektet.
+
+
