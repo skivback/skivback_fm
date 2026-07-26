@@ -1,4 +1,4 @@
- @import url('https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@400;600;700&display=swap');
 
 :root{
   --bg:#08070b;
@@ -220,4 +220,30 @@ input[type=range]{width:100%;accent-color:var(--pink);cursor:pointer}
   .now-playing{padding:9px 11px}
   .current-track{display:none}
   .secondary-controls{margin-top:4px}
+}
+
+/* Robust hiding for the YouTube IFrame API.
+   The API replaces #youtube-player with an iframe, so both the wrapper and
+   the generated iframe are forced off-screen. */
+.youtube-audio,
+#youtube-player,
+iframe#youtube-player,
+.youtube-audio iframe{
+  position:fixed !important;
+  left:-10000px !important;
+  top:-10000px !important;
+  width:1px !important;
+  height:1px !important;
+  min-width:1px !important;
+  min-height:1px !important;
+  max-width:1px !important;
+  max-height:1px !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  opacity:0 !important;
+  visibility:hidden !important;
+  overflow:hidden !important;
+  pointer-events:none !important;
+  clip-path:inset(100%) !important;
 }
