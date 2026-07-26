@@ -9,45 +9,33 @@
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
-
   <main class="radio-shell">
     <aside class="station-panel">
+      <div class="mini-brand">SKIVBACK <span>FM</span></div>
       <div class="panel-title">STATIONS</div>
       <nav id="station-list" class="station-list" aria-label="Radiostationer"></nav>
     </aside>
 
-    <section class="hero">
-      <div class="skyline" aria-hidden="true"></div>
-
-      <div class="identity">
-        <header class="brand">
-          <div class="logo-shadow">SKIVBACK</div>
-          <h1>SKIVBACK</h1><span>FM</span>
-        </header>
-
-        <div class="frequency-wrap">
-          <div id="frequency" class="frequency">103.2</div>
-          <div class="city">LOS SANTOS</div>
-        </div>
+    <section class="radio-display">
+      <div class="station-visual">
+        <img id="station-logo" class="station-logo" src="assets/logos/space-103-2.svg" alt="Space 103.2">
+        <div class="frequency-wrap"><span id="frequency">103.2</span><small>LOS SANTOS</small></div>
       </div>
 
       <section class="now-playing">
         <p class="label">NOW PLAYING</p>
-        <h2 id="current-station">SPACE 103.2</h2>
-        <p id="current-track" class="current-track">Välj en station och tryck PLAY</p>
-
+        <h1 id="current-station">SPACE 103.2</h1>
+        <p id="current-track">GTA RADIO — FULL STATION</p>
         <div class="progress-row">
           <span id="current-time">00:00</span>
           <input id="progress" aria-label="Spolning" type="range" min="0" max="100" value="0">
           <span id="duration">00:00</span>
         </div>
-
         <div class="controls">
           <button id="previous" type="button" aria-label="Föregående station">◀◀</button>
           <button id="play-pause" class="primary" type="button">PLAY</button>
           <button id="next" type="button" aria-label="Nästa station">▶▶</button>
         </div>
-
         <div class="secondary-controls">
           <button id="mute" type="button">MUTE</button>
           <label><span>VOL</span><input id="volume" aria-label="Volym" type="range" min="0" max="100" value="70"></label>
@@ -55,10 +43,7 @@
       </section>
     </section>
   </main>
-
-  <!-- YouTube-spelaren finns kvar för ljudet men är inte synlig i gränssnittet. -->
   <div class="youtube-audio" aria-hidden="true"><div id="youtube-player"></div></div>
-
   <script src="https://www.youtube.com/iframe_api"></script>
   <script src="app.js"></script>
 </body>
