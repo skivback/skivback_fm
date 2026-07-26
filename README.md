@@ -1,5 +1,5 @@
 # Skivback FM 
-<img width="574" height="548" alt="image" src="https://github.com/user-attachments/assets/74eeadb5-ecf5-435f-b0df-aa32ce94a351" />
+<img width="333" height="222" alt="image" src="https://github.com/user-attachments/assets/74eeadb5-ecf5-435f-b0df-aa32ce94a351" />
 
 
 - Går att köra här: https://skivback.github.io/skivback_fm/
