@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#09070d">
+  <title>Skivback FM</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+  <main class="radio-shell">
+    <aside class="station-panel">
+      <div class="panel-title">STATIONS</div>
+      <nav id="station-list" class="station-list"></nav>
+      <button id="random-station" class="small-action" type="button">RANDOM STATION</button>
+    </aside>
+
+    <section class="hero">
+      <div class="skyline" aria-hidden="true"></div>
+      <header class="brand">
+        <div class="logo-shadow">SKIVBACK</div>
+        <h1>SKIVBACK</h1><span>FM</span>
+      </header>
+
+      <div class="frequency-wrap">
+        <div id="frequency" class="frequency">103.2</div>
+        <div class="city">LOS SANTOS</div>
+      </div>
+
+      <section class="now-playing">
+        <p class="label">NOW PLAYING</p>
+        <h2 id="current-station">SPACE 103.2</h2>
+        <p id="current-track" class="current-track">Välj en station och tryck PLAY</p>
+
+        <div class="progress-row">
+          <span id="current-time">00:00</span>
+          <input id="progress" aria-label="Spolning" type="range" min="0" max="100" value="0">
+          <span id="duration">00:00</span>
+        </div>
+
+        <div class="controls">
+          <button id="previous" type="button">◀◀</button>
+          <button id="play-pause" class="primary" type="button">PLAY</button>
+          <button id="next" type="button">▶▶</button>
+        </div>
+
+        <div class="secondary-controls">
+          <button id="mute" type="button">MUTE</button>
+          <label><span>VOL</span><input id="volume" aria-label="Volym" type="range" min="0" max="100" value="70"></label>
+        </div>
+      </section>
+
+      <footer><span>ABOUT</span><span>CONTACT</span><span>PRIVACY</span></footer>
+    </section>
+
+    <aside class="video-panel">
+      <div class="panel-title">ON AIR</div>
+      <div class="video-frame"><div id="youtube-player"></div></div>
+      <div class="radio-data">
+        <div><span>CHANNEL</span><strong id="channel-number">01 / 23</strong></div>
+        <div><span>SIGNAL</span><strong>STEREO</strong></div>
+      </div>
+      <p class="legal-note">Innehållet spelas via YouTubes inbäddade spelare.</p>
+    </aside>
+  </main>
+
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script src="app.js"></script>
+</body>
+</html>
