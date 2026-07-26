@@ -1,26 +1,12 @@
-# Skivback FM
+# Skivback FM v3
 
-GTA-inspirerad webbradio som spelar stationerna via YouTube IFrame Player API.
+Statisk webbradio för GitHub Pages.
 
-## Ladda upp till GitHub
+## Nytt i v3
+- Kompakt helskärmsläge i landscape
+- Rullbar ikonlista med lokala stationsmärken
+- Stor logotyp för vald station
+- Dold YouTube-spelare
+- Responsiv portrait-layout
 
-Ladda upp `index.html`, `style.css`, `app.js` och `README.md` i repositoryts rot.
-
-## GitHub Pages
-
-1. Öppna **Settings → Pages**.
-2. Välj **Deploy from a branch**.
-3. Välj `main` och `/root`.
-4. Klicka **Save**.
-
-Sidan blir: `https://skivback.github.io/skivback_fm/`
-
-## Testa lokalt
-
-```bash
-python3 -m http.server 8000
-```
-
-Öppna `http://localhost:8000`.
-
-Station 21–23 har tillfälliga namn i `app.js`.
+De medföljande SVG-märkena är egenritade, GTA-inspirerade platshållare och inte officiella Rockstar-logotyper.
