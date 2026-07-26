@@ -31,74 +31,18 @@ function setLogoImage(img, logo, alt = "") {
   img.src = localLogo(logo);
 }
 
-const PLAYBACK_STORAGE_KEY="skivbackFmPlayback";
-
-function getSavedPlayback(){
-  try{
-    const saved=JSON.parse(localStorage.getItem(PLAYBACK_STORAGE_KEY));
-    const stationIndex=Number(saved?.stationIndex);
-    const position=Number(saved?.position);
-    return {
-      stationIndex:Number.isInteger(stationIndex)&&stationIndex>=0&&stationIndex<stations.length?stationIndex:6,
-      position:Number.isFinite(position)&&position>=0?position:0
-    };
-  }catch{
-    return {stationIndex:6,position:0};
-  }
-}
-
-const savedPlayback=getSavedPlayback();
-let player,currentStationIndex=savedPlayback.stationIndex,progressTimer=null,saveTimer=null,userSeeking=false,initialPosition=savedPlayback.position;
+let player,currentStationIndex=6,progressTimer=null,userSeeking=false;
 const $=s=>document.querySelector(s),stationList=$("#station-list"),currentStation=$("#current-station"),currentTrack=$("#current-track"),frequency=$("#frequency"),stationLogo=$("#station-logo"),playPause=$("#play-pause"),progress=$("#progress"),currentTime=$("#current-time"),duration=$("#duration"),volume=$("#volume");
 const formatTime=s=>{if(!Number.isFinite(s)||s<0)return"00:00";const m=Math.floor(s/60),sec=Math.floor(s%60);return`${String(m).padStart(2,"0")}:${String(sec).padStart(2,"0")}`};
 function renderStationList(){stationList.replaceChildren();stations.forEach((s,i)=>{const b=document.createElement("button");b.type="button";b.className="station-button";b.title=s.name;b.setAttribute("aria-label",s.name);const img=document.createElement("img");setLogoImage(img,s.logo,"");const text=document.createElement("span");text.textContent=s.name;b.append(img,text);b.addEventListener("click",()=>loadStation(i));stationList.appendChild(b)});updateActiveStation()}
 function updateActiveStation(){const s=stations[currentStationIndex];document.querySelectorAll(".station-button").forEach((b,i)=>{b.classList.toggle("active",i===currentStationIndex);if(i===currentStationIndex)b.scrollIntoView({block:"nearest",behavior:"smooth"})});currentStation.textContent=s.name;frequency.textContent=s.frequency;setLogoImage(stationLogo,s.logo,s.name);currentTrack.textContent="GTA RADIO — FULL STATION";document.title=`${s.name} · Skivback FM`}
-function savePlaybackState(){
-  if(!player||typeof player.getCurrentTime!=="function")return;
-  const position=player.getCurrentTime()??0;
-  localStorage.setItem(PLAYBACK_STORAGE_KEY,JSON.stringify({stationIndex:currentStationIndex,position}));
-}
-function loadStation(i){
-  currentStationIndex=(i+stations.length)%stations.length;
-  const s=stations[currentStationIndex];
-  initialPosition=s.startSeconds??0;
-  localStorage.setItem(PLAYBACK_STORAGE_KEY,JSON.stringify({stationIndex:currentStationIndex,position:initialPosition}));
-  updateActiveStation();
-  if(!player||typeof player.loadVideoById!=="function")return;
-  player.loadVideoById({videoId:s.videoId,startSeconds:initialPosition});
-}
+function loadStation(i){currentStationIndex=(i+stations.length)%stations.length;const s=stations[currentStationIndex];updateActiveStation();if(!player||typeof player.loadVideoById!=="function")return;player.loadVideoById({videoId:s.videoId,startSeconds:s.startSeconds??0})}
 function updateProgress(){if(!player||userSeeking)return;const e=player.getCurrentTime?.()??0,t=player.getDuration?.()??0;currentTime.textContent=formatTime(e);duration.textContent=formatTime(t);progress.value=t>0?String(e/t*100):"0"}
-window.onYouTubeIframeAPIReady=function(){
-  const s=stations[currentStationIndex];
-  const startAt=initialPosition>0?initialPosition:(s.startSeconds??0);
-  player=new YT.Player("youtube-player",{
-    width:"1",
-    height:"1",
-    videoId:s.videoId,
-    playerVars:{playsinline:1,rel:0,start:Math.floor(startAt)},
-    events:{
-      onReady:e=>{
-        e.target.setVolume(Number(volume.value));
-        if(startAt>0)e.target.seekTo(startAt,true);
-        progressTimer=setInterval(updateProgress,500);
-        saveTimer=setInterval(savePlaybackState,5000);
-      },
-      onStateChange:e=>{
-        playPause.textContent=e.data===YT.PlayerState.PLAYING?"PAUSE":"PLAY";
-        if(e.data===YT.PlayerState.PAUSED)savePlaybackState();
-        if(e.data===YT.PlayerState.ENDED)loadStation(currentStationIndex+1);
-      },
-      onError:e=>currentTrack.textContent=`YouTube-fel: ${e.data}`
-    }
-  });
-};
+window.onYouTubeIframeAPIReady=function(){const s=stations[currentStationIndex];player=new YT.Player("youtube-player",{width:"1",height:"1",videoId:s.videoId,playerVars:{playsinline:1,rel:0,start:s.startSeconds??0},events:{onReady:e=>{e.target.setVolume(Number(volume.value));progressTimer=setInterval(updateProgress,500)},onStateChange:e=>{playPause.textContent=e.data===YT.PlayerState.PLAYING?"PAUSE":"PLAY";if(e.data===YT.PlayerState.ENDED)loadStation(currentStationIndex+1)},onError:e=>currentTrack.textContent=`YouTube-fel: ${e.data}`}})};
 $("#previous").addEventListener("click",()=>loadStation(currentStationIndex-1));$("#next").addEventListener("click",()=>loadStation(currentStationIndex+1));playPause.addEventListener("click",()=>{if(!player)return;player.getPlayerState()===YT.PlayerState.PLAYING?player.pauseVideo():player.playVideo()});progress.addEventListener("input",()=>{userSeeking=true;const t=player?.getDuration?.()??0;currentTime.textContent=formatTime(t*Number(progress.value)/100)});progress.addEventListener("change",()=>{const t=player?.getDuration?.()??0;player?.seekTo?.(t*Number(progress.value)/100,true);userSeeking=false});volume.addEventListener("input",()=>{
   player?.setVolume?.(Number(volume.value));
   if(Number(volume.value)>0) player?.unMute?.();
 });
-
-window.addEventListener("pagehide",savePlaybackState);
-window.addEventListener("beforeunload",savePlaybackState);
 
 const shareButton=$("#share");
 const shareUrl="https://skivback.github.io/skivback_fm/";
