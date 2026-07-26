@@ -1,3 +1,49 @@
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#08070c;color:#fff;font-family:Arial,Helvetica,sans-serif}body{overflow:hidden}.noise{position:fixed;inset:0;pointer-events:none;opacity:.12;background-image:repeating-linear-gradient(0deg,transparent 0 3px,rgba(255,255,255,.035) 4px);z-index:10}.radio-shell{width:100vw;height:100dvh;display:grid;grid-template-columns:minmax(150px,22vw) 1fr;background:radial-gradient(circle at 65% 35%,#35135c 0,#120b23 44%,#05050a 100%)}.station-panel{min-width:0;padding:max(10px,env(safe-area-inset-top)) 8px max(10px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));border-right:1px solid rgba(255,255,255,.16);background:rgba(4,4,9,.82);display:flex;flex-direction:column;overflow:hidden}.mini-brand{font-weight:1000;letter-spacing:1.5px;font-size:clamp(12px,1.6vw,18px);padding:2px 5px 8px;color:#fff;text-shadow:0 0 12px #c755ff}.mini-brand span{color:#55f0ff}.panel-title{font-size:10px;letter-spacing:3px;color:#9f9aaa;padding:0 5px 7px}.station-list{display:flex;flex-direction:column;gap:5px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;padding-right:2px}.station-button{border:1px solid transparent;background:rgba(255,255,255,.045);color:#d8d6df;min-height:42px;border-radius:9px;padding:4px;display:grid;grid-template-columns:34px 1fr;align-items:center;gap:7px;text-align:left;cursor:pointer;transition:.18s ease}.station-button img{width:34px;height:34px;border-radius:7px;object-fit:contain;background:#08080c}.station-button span{font-size:clamp(9px,1.15vw,13px);font-weight:800;line-height:1.05}.station-button:hover,.station-button.active{border-color:#70f1ff;background:linear-gradient(90deg,rgba(103,235,255,.24),rgba(208,74,255,.12));box-shadow:0 0 18px rgba(93,229,255,.18)}.station-button.active img{filter:drop-shadow(0 0 7px #72f1ff)}.radio-display{min-width:0;display:grid;grid-template-columns:minmax(220px,42%) 1fr;align-items:center;gap:clamp(14px,3vw,46px);padding:max(18px,env(safe-area-inset-top)) max(20px,env(safe-area-inset-right)) max(18px,env(safe-area-inset-bottom)) 20px;overflow:hidden}.station-visual{text-align:center;min-width:0}.station-logo{display:block;width:min(31vw,320px);height:min(31vw,320px);max-height:48vh;object-fit:contain;margin:auto;filter:drop-shadow(0 0 30px rgba(208,79,255,.42));transition:opacity .18s,transform .18s}.frequency-wrap{margin-top:10px;display:flex;justify-content:center;align-items:baseline;gap:10px}.frequency-wrap span{font-size:clamp(28px,5vw,72px);font-weight:1000;letter-spacing:-3px}.frequency-wrap small{font-size:10px;letter-spacing:3px;color:#8deeff}.now-playing{min-width:0;max-width:760px}.label{margin:0 0 6px;font-size:11px;letter-spacing:5px;color:#c46aff}.now-playing h1{margin:0;font-size:clamp(28px,5vw,76px);line-height:.95;text-transform:uppercase;overflow-wrap:anywhere;text-shadow:0 0 28px rgba(203,76,255,.35)}#current-track{margin:12px 0 22px;color:#a9a5b3;letter-spacing:2px;font-size:clamp(10px,1.4vw,15px)}.progress-row{display:grid;grid-template-columns:44px 1fr 44px;align-items:center;gap:10px;font-variant-numeric:tabular-nums;font-size:11px}.progress-row input,.secondary-controls input{width:100%;accent-color:#63e9ff}.controls{display:flex;gap:10px;margin-top:19px}.controls button,.secondary-controls button{border:1px solid rgba(255,255,255,.24);background:#17131f;color:#fff;border-radius:10px;font-weight:900;letter-spacing:1px;min-height:48px;padding:0 20px}.controls .primary{min-width:130px;background:linear-gradient(135deg,#d74cff,#34dff2);color:#08050c;border:0}.secondary-controls{display:flex;align-items:center;gap:16px;margin-top:12px}.secondary-controls button{min-height:36px;padding:0 13px;font-size:11px}.secondary-controls label{display:grid;grid-template-columns:auto minmax(90px,220px);align-items:center;gap:10px;font-size:11px;color:#aaa4b2}.youtube-audio,#youtube-player,.youtube-audio iframe{position:fixed!important;left:-10000px!important;top:-10000px!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;border:0!important}
 @media (max-width:700px) and (orientation:portrait){body{overflow:auto}.radio-shell{height:auto;min-height:100dvh;display:flex;flex-direction:column}.station-panel{order:2;border-right:0;border-top:1px solid rgba(255,255,255,.16);height:44dvh;padding:7px}.mini-brand{display:none}.panel-title{padding:2px 4px 5px}.station-list{display:grid;grid-template-columns:1fr 1fr;gap:4px}.station-button{min-height:34px;grid-template-columns:26px 1fr;padding:3px}.station-button img{width:26px;height:26px}.station-button span{font-size:9px}.radio-display{order:1;display:grid;grid-template-columns:90px 1fr;gap:10px;padding:12px;min-height:56dvh}.station-logo{width:82px;height:82px}.frequency-wrap{display:block;margin-top:4px}.frequency-wrap span{font-size:23px;letter-spacing:-1px}.frequency-wrap small{display:block;font-size:7px;letter-spacing:1px}.label{font-size:8px;letter-spacing:3px}.now-playing h1{font-size:clamp(22px,8vw,38px)}#current-track{font-size:8px;margin:7px 0 10px}.progress-row{grid-template-columns:34px 1fr 34px;gap:5px;font-size:9px}.controls{margin-top:10px;gap:6px}.controls button{min-height:38px;padding:0 12px}.controls .primary{min-width:86px}.secondary-controls{margin-top:7px;gap:8px}.secondary-controls label{grid-template-columns:auto minmax(60px,1fr)}}
 @media (orientation:landscape) and (max-height:600px){.radio-shell{grid-template-columns:92px 1fr;height:100dvh}.station-panel{padding:5px 4px 5px max(4px,env(safe-area-inset-left))}.mini-brand{font-size:9px;letter-spacing:.5px;padding:1px 2px 4px}.panel-title{display:none}.station-list{gap:3px}.station-button{min-height:38px;display:flex;justify-content:center;padding:2px;border-radius:7px}.station-button img{width:32px;height:32px}.station-button span{display:none}.radio-display{grid-template-columns:minmax(120px,32%) 1fr;gap:14px;padding:max(7px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(7px,env(safe-area-inset-bottom)) 12px}.station-logo{width:min(29vh,180px);height:min(29vh,180px);max-height:none}.frequency-wrap{margin-top:3px;gap:5px}.frequency-wrap span{font-size:clamp(22px,6vh,40px);letter-spacing:-2px}.frequency-wrap small{font-size:6px;letter-spacing:1.5px}.label{font-size:7px;letter-spacing:3px;margin-bottom:3px}.now-playing h1{font-size:clamp(25px,7vh,50px);line-height:.9}#current-track{font-size:7px;margin:5px 0 8px}.progress-row{grid-template-columns:32px 1fr 32px;gap:5px;font-size:8px}.controls{margin-top:7px;gap:6px}.controls button{min-height:34px;padding:0 12px;border-radius:7px;font-size:10px}.controls .primary{min-width:82px}.secondary-controls{margin-top:5px;gap:8px}.secondary-controls button{min-height:27px;padding:0 8px;font-size:8px}.secondary-controls label{grid-template-columns:auto minmax(80px,180px);gap:5px;font-size:8px}}
+
+/* v3.1: compact car-radio layout in mobile landscape */
+@media (orientation: landscape) and (max-height: 600px) {
+  .radio-display {
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .station-visual {
+    align-self: start;
+    padding-top: 8px;
+  }
+
+  .station-logo {
+    width: 68px;
+    height: 68px;
+    max-width: 68px;
+    max-height: 68px;
+    filter: drop-shadow(0 0 12px rgba(208,79,255,.35));
+  }
+
+  .frequency-wrap {
+    margin-top: 4px;
+    display: block;
+  }
+
+  .frequency-wrap span {
+    display: block;
+    font-size: 20px;
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+
+  .frequency-wrap small {
+    display: block;
+    margin-top: 2px;
+    font-size: 5px;
+    letter-spacing: 1px;
+  }
+
+  .now-playing {
+    width: 100%;
+    max-width: none;
+    align-self: center;
+  }
+}
