@@ -1,9 +1,9 @@
-# Skivback FM v0.9
-<img width="574" height="548" alt="image" src="https://github.com/user-attachments/assets/74eeadb5-ecf5-435f-b0df-aa32ce94a351" />
+# Skivback FM v3.4
 
+En statisk, mobilanpassad GTA-inspirerad radiospelare som använder YouTube IFrame Player API för ljuduppspelning.
 
-- En statisk, mobilanpassad GTA-inspirerad radiospelare som använder YouTube IFrame Player API för ljuduppspelning.
-- Går att köra här: https://skivback.github.io/skivback_fm/
+## Nytt i v3.4
+
 - Radiostationernas bildmärken ligger lokalt i `assets/logos/` och laddas inte från externa bildservrar.
 - Blue Ark är vald när appen startar.
 - Stationerna 18–23 är Kult FM, Still Slipping Los Santos, The Music Locker, Media Player, MOTOMAMI Los Santos och Blonded Los Santos.

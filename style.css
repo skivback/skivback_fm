@@ -372,3 +372,59 @@
     font-size: 9px;
   }
 }
+
+/* v4.1 — colour artwork, simplified volume and native sharing */
+.radio-display { position: relative; }
+.share-button {
+  position: absolute;
+  z-index: 8;
+  top: max(14px, env(safe-area-inset-top));
+  right: max(16px, env(safe-area-inset-right));
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(102,239,255,.72);
+  border-radius: 50%;
+  color: #fff;
+  background: rgba(10,8,17,.72);
+  box-shadow: 0 0 16px rgba(102,239,255,.22);
+  cursor: pointer;
+  transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
+}
+.share-button:hover,
+.share-button:focus-visible {
+  transform: translateY(-1px) scale(1.04);
+  background: rgba(31,20,48,.92);
+  box-shadow: 0 0 22px rgba(102,239,255,.48);
+  outline: none;
+}
+.share-button.copied {
+  background: linear-gradient(135deg,#d74cff,#34dff2);
+  color: #08050c;
+}
+.share-button svg { width: 24px; height: 24px; fill: currentColor; }
+.secondary-controls { justify-content: stretch; }
+.secondary-controls label { width: 100%; max-width: none; }
+
+@media (max-width:700px) and (orientation:portrait) {
+  .share-button {
+    width: 39px;
+    height: 39px;
+    top: max(10px, env(safe-area-inset-top));
+    right: max(10px, env(safe-area-inset-right));
+  }
+  .share-button svg { width: 20px; height: 20px; }
+  .now-playing { padding-right: 44px; }
+}
+
+@media (orientation:landscape) and (max-width:1100px) {
+  .share-button {
+    width: clamp(34px, 9vh, 46px);
+    height: clamp(34px, 9vh, 46px);
+    top: max(9px, env(safe-area-inset-top));
+    right: max(12px, env(safe-area-inset-right));
+  }
+  .share-button svg { width: clamp(18px, 4.5vh, 24px); height: clamp(18px, 4.5vh, 24px); }
+  .now-playing { padding-right: clamp(58px, 12vh, 78px); }
+}
