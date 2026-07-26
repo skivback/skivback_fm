@@ -428,3 +428,46 @@
   .share-button svg { width: clamp(18px, 4.5vh, 24px); height: clamp(18px, 4.5vh, 24px); }
   .now-playing { padding-right: clamp(58px, 12vh, 78px); }
 }
+
+/* v4.3 — discreet share control below the player */
+.share-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+.share-button {
+  position: static;
+  width: 32px;
+  height: 32px;
+  border-color: rgba(255,255,255,.24);
+  color: rgba(255,255,255,.72);
+  background: rgba(255,255,255,.035);
+  box-shadow: none;
+  opacity: .72;
+}
+.share-button:hover,
+.share-button:focus-visible {
+  opacity: 1;
+  transform: none;
+  background: rgba(255,255,255,.08);
+  box-shadow: 0 0 12px rgba(102,239,255,.18);
+}
+.share-button svg {
+  width: 17px;
+  height: 17px;
+}
+@media (max-width:700px) and (orientation:portrait),
+       (orientation:landscape) and (max-width:1100px) {
+  .share-button {
+    position: static;
+    width: 30px;
+    height: 30px;
+  }
+  .share-button svg {
+    width: 16px;
+    height: 16px;
+  }
+  .now-playing {
+    padding-right: clamp(14px, 4vh, 30px);
+  }
+}
