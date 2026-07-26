@@ -2,30 +2,33 @@
 <html lang="sv">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#09070d">
   <title>Skivback FM</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
+
   <main class="radio-shell">
     <aside class="station-panel">
       <div class="panel-title">STATIONS</div>
-      <nav id="station-list" class="station-list"></nav>
-      <button id="random-station" class="small-action" type="button">RANDOM STATION</button>
+      <nav id="station-list" class="station-list" aria-label="Radiostationer"></nav>
     </aside>
 
     <section class="hero">
       <div class="skyline" aria-hidden="true"></div>
-      <header class="brand">
-        <div class="logo-shadow">SKIVBACK</div>
-        <h1>SKIVBACK</h1><span>FM</span>
-      </header>
 
-      <div class="frequency-wrap">
-        <div id="frequency" class="frequency">103.2</div>
-        <div class="city">LOS SANTOS</div>
+      <div class="identity">
+        <header class="brand">
+          <div class="logo-shadow">SKIVBACK</div>
+          <h1>SKIVBACK</h1><span>FM</span>
+        </header>
+
+        <div class="frequency-wrap">
+          <div id="frequency" class="frequency">103.2</div>
+          <div class="city">LOS SANTOS</div>
+        </div>
       </div>
 
       <section class="now-playing">
@@ -40,9 +43,9 @@
         </div>
 
         <div class="controls">
-          <button id="previous" type="button">◀◀</button>
+          <button id="previous" type="button" aria-label="Föregående station">◀◀</button>
           <button id="play-pause" class="primary" type="button">PLAY</button>
-          <button id="next" type="button">▶▶</button>
+          <button id="next" type="button" aria-label="Nästa station">▶▶</button>
         </div>
 
         <div class="secondary-controls">
@@ -50,20 +53,11 @@
           <label><span>VOL</span><input id="volume" aria-label="Volym" type="range" min="0" max="100" value="70"></label>
         </div>
       </section>
-
-      <footer><span>ABOUT</span><span>CONTACT</span><span>PRIVACY</span></footer>
     </section>
-
-    <aside class="video-panel">
-      <div class="panel-title">ON AIR</div>
-      <div class="video-frame"><div id="youtube-player"></div></div>
-      <div class="radio-data">
-        <div><span>CHANNEL</span><strong id="channel-number">01 / 23</strong></div>
-        <div><span>SIGNAL</span><strong>STEREO</strong></div>
-      </div>
-      <p class="legal-note">Innehållet spelas via YouTubes inbäddade spelare.</p>
-    </aside>
   </main>
+
+  <!-- YouTube-spelaren finns kvar för ljudet men är inte synlig i gränssnittet. -->
+  <div class="youtube-audio" aria-hidden="true"><div id="youtube-player"></div></div>
 
   <script src="https://www.youtube.com/iframe_api"></script>
   <script src="app.js"></script>
