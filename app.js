@@ -25,18 +25,260 @@ const stations=[
 {index:23,name:"BLONDED LOS SANTOS",frequency:"97.8",videoId:"-tVumJBaTWY",logo:"blonded-los-santos.webp"}
 ];
 
-const localLogo = logo => `assets/logos/${logo}`;
-function setLogoImage(img, logo, alt = "") {
-  img.alt = alt;
-  img.src = localLogo(logo);
+const selectElement = (selector) => document.querySelector(selector);
+
+const stationList = selectElement("#station-list");
+const currentStationElement = selectElement("#current-station");
+const currentTrackElement = selectElement("#current-track");
+const frequencyElement = selectElement("#frequency");
+const stationLogoElement = selectElement("#station-logo");
+const playPauseButton = selectElement("#play-pause");
+const previousButton = selectElement("#previous");
+const nextButton = selectElement("#next");
+const progressSlider = selectElement("#progress");
+const currentTimeElement = selectElement("#current-time");
+const durationElement = selectElement("#duration");
+const volumeSlider = selectElement("#volume");
+const shareButton = selectElement("#share");
+
+let player;
+let currentStationIndex = DEFAULT_STATION_INDEX;
+let progressTimer;
+let userIsSeeking = false;
+
+function getLogoPath(logoFilename) {
+  return `assets/logos/${logoFilename}`;
 }
 
-let player,currentStationIndex=6,progressTimer=null,userSeeking=false;
-const $=s=>document.querySelector(s),stationList=$("#station-list"),currentStation=$("#current-station"),currentTrack=$("#current-track"),frequency=$("#frequency"),stationLogo=$("#station-logo"),playPause=$("#play-pause"),progress=$("#progress"),currentTime=$("#current-time"),duration=$("#duration"),volume=$("#volume"),muteButton=$("#mute");
-const formatTime=s=>{if(!Number.isFinite(s)||s<0)return"00:00";const m=Math.floor(s/60),sec=Math.floor(s%60);return`${String(m).padStart(2,"0")}:${String(sec).padStart(2,"0")}`};
-function renderStationList(){stationList.replaceChildren();stations.forEach((s,i)=>{const b=document.createElement("button");b.type="button";b.className="station-button";b.title=s.name;b.setAttribute("aria-label",s.name);const img=document.createElement("img");setLogoImage(img,s.logo,"");const text=document.createElement("span");text.textContent=s.name;b.append(img,text);b.addEventListener("click",()=>loadStation(i));stationList.appendChild(b)});updateActiveStation()}
-function updateActiveStation(){const s=stations[currentStationIndex];document.querySelectorAll(".station-button").forEach((b,i)=>{b.classList.toggle("active",i===currentStationIndex);if(i===currentStationIndex)b.scrollIntoView({block:"nearest",behavior:"smooth"})});currentStation.textContent=s.name;frequency.textContent=s.frequency;setLogoImage(stationLogo,s.logo,s.name);currentTrack.textContent="GTA RADIO — FULL STATION";document.title=`${s.name} · Skivback FM`}
-function loadStation(i){currentStationIndex=(i+stations.length)%stations.length;const s=stations[currentStationIndex];updateActiveStation();if(!player||typeof player.loadVideoById!=="function")return;player.loadVideoById({videoId:s.videoId,startSeconds:s.startSeconds??0})}
-function updateProgress(){if(!player||userSeeking)return;const e=player.getCurrentTime?.()??0,t=player.getDuration?.()??0;currentTime.textContent=formatTime(e);duration.textContent=formatTime(t);progress.value=t>0?String(e/t*100):"0"}
-window.onYouTubeIframeAPIReady=function(){const s=stations[currentStationIndex];player=new YT.Player("youtube-player",{width:"1",height:"1",videoId:s.videoId,playerVars:{playsinline:1,rel:0,start:s.startSeconds??0},events:{onReady:e=>{e.target.setVolume(Number(volume.value));progressTimer=setInterval(updateProgress,500)},onStateChange:e=>{playPause.textContent=e.data===YT.PlayerState.PLAYING?"PAUSE":"PLAY";if(e.data===YT.PlayerState.ENDED)loadStation(currentStationIndex+1)},onError:e=>currentTrack.textContent=`YouTube-fel: ${e.data}`}})};
-$("#previous").addEventListener("click",()=>loadStation(currentStationIndex-1));$("#next").addEventListener("click",()=>loadStation(currentStationIndex+1));playPause.addEventListener("click",()=>{if(!player)return;player.getPlayerState()===YT.PlayerState.PLAYING?player.pauseVideo():player.playVideo()});progress.addEventListener("input",()=>{userSeeking=true;const t=player?.getDuration?.()??0;currentTime.textContent=formatTime(t*Number(progress.value)/100)});progress.addEventListener("change",()=>{const t=player?.getDuration?.()??0;player?.seekTo?.(t*Number(progress.value)/100,true);userSeeking=false});volume.addEventListener("input",()=>{player?.setVolume?.(Number(volume.value));if(Number(volume.value)>0){player?.unMute?.();muteButton.textContent="MUTE"}});muteButton.addEventListener("click",()=>{if(!player)return;if(player.isMuted()){player.unMute();muteButton.textContent="MUTE"}else{player.mute();muteButton.textContent="UNMUTE"}});renderStationList();
+function setLogoImage(imageElement, logoFilename, altText = "") {
+  imageElement.alt = altText;
+  imageElement.src = getLogoPath(logoFilename);
+}
+
+function formatTime(seconds) {
+  if (!Number.isFinite(seconds) || seconds < 0) {
+    return "00:00";
+  }
+
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = Math.floor(seconds % 60);
+
+  return `${String(minutes).padStart(2, "0")}:${String(
+    remainingSeconds,
+  ).padStart(2, "0")}`;
+}
+
+function renderStationList() {
+  stationList.replaceChildren();
+
+  stations.forEach((station, stationIndex) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "station-button";
+    button.title = station.name;
+    button.setAttribute("aria-label", station.name);
+
+    const logoImage = document.createElement("img");
+    setLogoImage(logoImage, station.logo);
+
+    const stationName = document.createElement("span");
+    stationName.textContent = station.name;
+
+    button.append(logoImage, stationName);
+    button.addEventListener("click", () => loadStation(stationIndex));
+
+    stationList.appendChild(button);
+  });
+
+  updateActiveStation();
+}
+
+function updateActiveStation() {
+  const station = stations[currentStationIndex];
+  const stationButtons = document.querySelectorAll(".station-button");
+
+  stationButtons.forEach((button, stationIndex) => {
+    const isActive = stationIndex === currentStationIndex;
+    button.classList.toggle("active", isActive);
+
+    if (isActive) {
+      button.scrollIntoView({
+        block: "nearest",
+        behavior: "smooth",
+      });
+    }
+  });
+
+  currentStationElement.textContent = station.name;
+  frequencyElement.textContent = station.frequency;
+  currentTrackElement.textContent = "GTA RADIO — FULL STATION";
+  setLogoImage(stationLogoElement, station.logo, station.name);
+
+  document.title = `${station.name} · Skivback FM`;
+}
+
+function loadStation(stationIndex) {
+  currentStationIndex =
+    (stationIndex + stations.length) % stations.length;
+
+  const station = stations[currentStationIndex];
+  updateActiveStation();
+
+  if (!player || typeof player.loadVideoById !== "function") {
+    return;
+  }
+
+  player.loadVideoById({
+    videoId: station.videoId,
+    startSeconds: station.startSeconds ?? 0,
+  });
+}
+
+function updateProgress() {
+  if (!player || userIsSeeking) {
+    return;
+  }
+
+  const elapsedSeconds = player.getCurrentTime?.() ?? 0;
+  const totalSeconds = player.getDuration?.() ?? 0;
+
+  currentTimeElement.textContent = formatTime(elapsedSeconds);
+  durationElement.textContent = formatTime(totalSeconds);
+  progressSlider.value =
+    totalSeconds > 0 ? String((elapsedSeconds / totalSeconds) * 100) : "0";
+}
+
+function handlePlayerReady(event) {
+  event.target.setVolume(Number(volumeSlider.value));
+
+  progressTimer = window.setInterval(
+    updateProgress,
+    PROGRESS_UPDATE_INTERVAL_MS,
+  );
+}
+
+function handlePlayerStateChange(event) {
+  const isPlaying = event.data === YT.PlayerState.PLAYING;
+  playPauseButton.textContent = isPlaying ? "PAUSE" : "PLAY";
+
+  if (event.data === YT.PlayerState.ENDED) {
+    loadStation(currentStationIndex + 1);
+  }
+}
+
+function handlePlayerError(event) {
+  currentTrackElement.textContent = `YouTube-fel: ${event.data}`;
+}
+
+window.onYouTubeIframeAPIReady = function onYouTubeIframeAPIReady() {
+  const station = stations[currentStationIndex];
+  player = new YT.Player("youtube-player", {
+    width: "1",
+    height: "1",
+    videoId: station.videoId,
+    playerVars: {
+      playsinline: 1,
+      rel: 0,
+      start: Math.floor(station.startSeconds ?? 0),
+    },
+    events: {
+      onReady: handlePlayerReady,
+      onStateChange: handlePlayerStateChange,
+      onError: handlePlayerError,
+    },
+  });
+};
+
+function togglePlayback() {
+  if (!player) {
+    return;
+  }
+
+  const isPlaying = player.getPlayerState() === YT.PlayerState.PLAYING;
+
+  if (isPlaying) {
+    player.pauseVideo();
+  } else {
+    player.playVideo();
+  }
+}
+
+function handleProgressInput() {
+  userIsSeeking = true;
+
+  const totalSeconds = player?.getDuration?.() ?? 0;
+  const selectedSeconds =
+    (totalSeconds * Number(progressSlider.value)) / 100;
+
+  currentTimeElement.textContent = formatTime(selectedSeconds);
+}
+
+function handleProgressChange() {
+  const totalSeconds = player?.getDuration?.() ?? 0;
+  const selectedSeconds =
+    (totalSeconds * Number(progressSlider.value)) / 100;
+
+  player?.seekTo?.(selectedSeconds, true);
+  userIsSeeking = false;
+}
+
+function handleVolumeInput() {
+  const volume = Number(volumeSlider.value);
+  player?.setVolume?.(volume);
+
+  if (volume > 0) {
+    player?.unMute?.();
+  }
+}
+
+async function shareSkivbackFm() {
+  try {
+    if (navigator.share) {
+      await navigator.share({
+        title: "Skivback FM",
+        text: "Lyssna på Skivback FM",
+        url: SHARE_URL,
+      });
+      return;
+    }
+
+    await copyShareUrl();
+  } catch (error) {
+    if (error?.name !== "AbortError") {
+      window.prompt("Kopiera länken:", SHARE_URL);
+    }
+  }
+}
+
+async function copyShareUrl() {
+  await navigator.clipboard.writeText(SHARE_URL);
+
+  shareButton.classList.add("copied");
+  shareButton.setAttribute("aria-label", "Länken kopierad");
+  shareButton.title = "Länken kopierad";
+
+  window.setTimeout(resetShareButton, 1600);
+}
+
+function resetShareButton() {
+  shareButton.classList.remove("copied");
+  shareButton.setAttribute("aria-label", "Dela Skivback FM");
+  shareButton.title = "Dela Skivback FM";
+}
+
+previousButton.addEventListener("click", () => {
+  loadStation(currentStationIndex - 1);
+});
+
+nextButton.addEventListener("click", () => {
+  loadStation(currentStationIndex + 1);
+});
+
+playPauseButton.addEventListener("click", togglePlayback);
+progressSlider.addEventListener("input", handleProgressInput);
+progressSlider.addEventListener("change", handleProgressChange);
+volumeSlider.addEventListener("input", handleVolumeInput);
+shareButton.addEventListener("click", shareSkivbackFm);
+
+
+renderStationList();
