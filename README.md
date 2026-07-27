@@ -5,7 +5,7 @@
 - Kör appen här: https://skivback.github.io/skivback_fm/
 - En statisk, mobilanpassad och GTA-inspirerad radiospelare som använder YouTube IFrame Player API för ljuduppspelning.
 - Radiostationernas logotyper ligger lokalt i `assets/logos/` och hämtas inte från externa bildservrar.
-- Blue Ark är vald som standard när appen startar.
+- En slumpmässig radiostation väljs när appen startar.
 
 ## Publicera med GitHub Pages
 

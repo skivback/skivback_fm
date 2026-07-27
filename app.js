@@ -1,6 +1,5 @@
 "use strict";
 
-const DEFAULT_STATION_INDEX = 6;
 const SHARE_URL = "https://skivback.github.io/skivback_fm/";
 const PROGRESS_UPDATE_INTERVAL_MS = 500;
 
@@ -186,9 +185,13 @@ const volumeSlider = selectElement("#volume");
 const shareButton = selectElement("#share");
 
 let player;
-let currentStationIndex = DEFAULT_STATION_INDEX;
+let currentStationIndex = getRandomStationIndex();
 let progressTimer;
 let userIsSeeking = false;
+
+function getRandomStationIndex() {
+  return Math.floor(Math.random() * stations.length);
+}
 
 function getLogoPath(logoFilename) {
   return `assets/logos/${logoFilename}`;
@@ -294,7 +297,6 @@ function updateProgress() {
 
 function handlePlayerReady(event) {
   event.target.setVolume(Number(volumeSlider.value));
-  event.target.playVideo();
 
   progressTimer = window.setInterval(
     updateProgress,
@@ -322,7 +324,6 @@ window.onYouTubeIframeAPIReady = function onYouTubeIframeAPIReady() {
     height: "1",
     videoId: station.videoId,
     playerVars: {
-      autoplay: 1,
       playsinline: 1,
       rel: 0,
       start: Math.floor(station.startSeconds ?? 0),
