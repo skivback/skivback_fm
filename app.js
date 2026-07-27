@@ -294,6 +294,7 @@ function updateProgress() {
 
 function handlePlayerReady(event) {
   event.target.setVolume(Number(volumeSlider.value));
+  event.target.playVideo();
 
   progressTimer = window.setInterval(
     updateProgress,
@@ -321,6 +322,7 @@ window.onYouTubeIframeAPIReady = function onYouTubeIframeAPIReady() {
     height: "1",
     videoId: station.videoId,
     playerVars: {
+      autoplay: 1,
       playsinline: 1,
       rel: 0,
       start: Math.floor(station.startSeconds ?? 0),
