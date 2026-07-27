@@ -3,6 +3,10 @@
 const SHARE_URL = "https://skivback.github.io/skivback_fm/";
 const PROGRESS_UPDATE_INTERVAL_MS = 500;
 const PLAY_ATTENTION_CLASS = "needs-play";
+const RANDOM_START_MARGIN_SECONDS = 120;
+const MINIMUM_DURATION_FOR_RANDOM_START_SECONDS = 300;
+const RANDOM_SEEK_RETRY_INTERVAL_MS = 250;
+const RANDOM_SEEK_MAX_ATTEMPTS = 20;
 
 const stations = [
   {
@@ -189,6 +193,8 @@ let player;
 let currentStationIndex = getRandomStationIndex();
 let progressTimer;
 let userIsSeeking = false;
+let randomSeekAttempt = 0;
+let randomSeekPending = true;
 
 playPauseButton.classList.add(PLAY_ATTENTION_CLASS);
 
@@ -267,6 +273,51 @@ function updateActiveStation() {
   document.title = `${station.name} · Skivback FM`;
 }
 
+function getRandomPlaybackPosition(totalSeconds) {
+  if (totalSeconds < MINIMUM_DURATION_FOR_RANDOM_START_SECONDS) {
+    return 0;
+  }
+
+  const availableSeconds =
+    totalSeconds - RANDOM_START_MARGIN_SECONDS * 2;
+
+  return (
+    RANDOM_START_MARGIN_SECONDS +
+    Math.floor(Math.random() * availableSeconds)
+  );
+}
+
+function scheduleRandomSeek() {
+  randomSeekPending = true;
+  randomSeekAttempt = 0;
+  seekToRandomPositionWhenAvailable();
+}
+
+function seekToRandomPositionWhenAvailable() {
+  if (!player || !randomSeekPending) {
+    return;
+  }
+
+  const totalSeconds = player.getDuration?.() ?? 0;
+
+  if (totalSeconds > 0) {
+    const randomPosition = getRandomPlaybackPosition(totalSeconds);
+    player.seekTo(randomPosition, true);
+    randomSeekPending = false;
+    updateProgress();
+    return;
+  }
+
+  randomSeekAttempt += 1;
+
+  if (randomSeekAttempt < RANDOM_SEEK_MAX_ATTEMPTS) {
+    window.setTimeout(
+      seekToRandomPositionWhenAvailable,
+      RANDOM_SEEK_RETRY_INTERVAL_MS,
+    );
+  }
+}
+
 function loadStation(stationIndex) {
   currentStationIndex =
     (stationIndex + stations.length) % stations.length;
@@ -278,9 +329,12 @@ function loadStation(stationIndex) {
     return;
   }
 
+  randomSeekPending = true;
+  randomSeekAttempt = 0;
+
   player.loadVideoById({
     videoId: station.videoId,
-    startSeconds: station.startSeconds ?? 0,
+    startSeconds: 0,
   });
 }
 
@@ -300,6 +354,7 @@ function updateProgress() {
 
 function handlePlayerReady(event) {
   event.target.setVolume(Number(volumeSlider.value));
+  scheduleRandomSeek();
 
   progressTimer = window.setInterval(
     updateProgress,
@@ -311,6 +366,10 @@ function handlePlayerStateChange(event) {
   const isPlaying = event.data === YT.PlayerState.PLAYING;
   playPauseButton.textContent = isPlaying ? "PAUSE" : "PLAY";
   playPauseButton.classList.toggle(PLAY_ATTENTION_CLASS, !isPlaying);
+
+  if (randomSeekPending) {
+    seekToRandomPositionWhenAvailable();
+  }
 
   if (event.data === YT.PlayerState.ENDED) {
     loadStation(currentStationIndex + 1);
@@ -330,7 +389,7 @@ window.onYouTubeIframeAPIReady = function onYouTubeIframeAPIReady() {
     playerVars: {
       playsinline: 1,
       rel: 0,
-      start: Math.floor(station.startSeconds ?? 0),
+      start: 0,
     },
     events: {
       onReady: handlePlayerReady,
