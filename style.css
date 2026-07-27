@@ -471,3 +471,58 @@
     padding-right: clamp(14px, 4vh, 30px);
   }
 }
+
+
+/* v4.7 — subtle attention cue while playback is stopped */
+.controls .primary {
+  position: relative;
+  isolation: isolate;
+}
+
+.controls .primary.needs-play {
+  animation: play-button-breathe 1.8s ease-in-out infinite;
+}
+
+.controls .primary.needs-play::after {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  z-index: -1;
+  border: 2px solid rgba(99, 233, 255, .72);
+  border-radius: inherit;
+  pointer-events: none;
+  animation: play-button-ring 1.8s ease-out infinite;
+}
+
+@keyframes play-button-breathe {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(99, 233, 255, 0);
+  }
+  50% {
+    transform: scale(1.035);
+    box-shadow: 0 0 22px rgba(99, 233, 255, .38);
+  }
+}
+
+@keyframes play-button-ring {
+  0% {
+    opacity: .8;
+    transform: scale(.96);
+  }
+  75%, 100% {
+    opacity: 0;
+    transform: scale(1.18);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .controls .primary.needs-play,
+  .controls .primary.needs-play::after {
+    animation: none;
+  }
+
+  .controls .primary.needs-play {
+    box-shadow: 0 0 18px rgba(99, 233, 255, .35);
+  }
+}

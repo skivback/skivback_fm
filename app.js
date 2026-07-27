@@ -2,6 +2,7 @@
 
 const SHARE_URL = "https://skivback.github.io/skivback_fm/";
 const PROGRESS_UPDATE_INTERVAL_MS = 500;
+const PLAY_ATTENTION_CLASS = "needs-play";
 
 const stations = [
   {
@@ -189,6 +190,8 @@ let currentStationIndex = getRandomStationIndex();
 let progressTimer;
 let userIsSeeking = false;
 
+playPauseButton.classList.add(PLAY_ATTENTION_CLASS);
+
 function getRandomStationIndex() {
   return Math.floor(Math.random() * stations.length);
 }
@@ -307,6 +310,7 @@ function handlePlayerReady(event) {
 function handlePlayerStateChange(event) {
   const isPlaying = event.data === YT.PlayerState.PLAYING;
   playPauseButton.textContent = isPlaying ? "PAUSE" : "PLAY";
+  playPauseButton.classList.toggle(PLAY_ATTENTION_CLASS, !isPlaying);
 
   if (event.data === YT.PlayerState.ENDED) {
     loadStation(currentStationIndex + 1);
