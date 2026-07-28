@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#09070d">
   <title>Skivback FM</title>
   <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png" />
@@ -11,8 +10,12 @@
   <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png" />
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#16071f" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Skivback FM" />
+  <meta name="mobile-web-app-capable" content="yes" />
 
-  <link rel="stylesheet" href="style.css?v=4.7">
+  <link rel="stylesheet" href="style.css?v=5.1">
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -33,11 +36,6 @@
         <p class="label">NOW PLAYING</p>
         <h1 id="current-station">BLUE ARK</h1>
         <p id="current-track">GTA RADIO — FULL STATION</p>
-        <div class="progress-row">
-          <span id="current-time">00:00</span>
-          <input id="progress" aria-label="Spolning" type="range" min="0" max="100" value="0">
-          <span id="duration">00:00</span>
-        </div>
         <div class="controls">
           <button id="previous" type="button" aria-label="Föregående station">◀◀</button>
           <button id="play-pause" class="primary" type="button">PLAY</button>
@@ -56,6 +54,6 @@
   </main>
   <div class="youtube-audio" aria-hidden="true"><div id="youtube-player"></div></div>
   <script src="https://www.youtube.com/iframe_api"></script>
-  <script src="app.js?v=4.7"></script>
+  <script src="app.js?v=5.1"></script>
 </body>
 </html>

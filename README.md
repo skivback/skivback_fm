@@ -14,3 +14,10 @@ Ladda upp innehållet i repositoryts rot och välj `main` samt `/ (root)` under 
 ## Lägg till på iPhone-hemskärmen
 
 Öppna sidan i Safari, tryck på **Dela** och välj **Lägg till på hemskärmen**. När appen startas från ikonen öppnas den utan Safaris adressfält, med mörk bakgrund och ett statusfält som smälter in i designen.
+
+
+## Radiobeteende
+
+- Ingen tidsindikator eller spolningslist visas.
+- Varje vald station startar på en slumpmässig position.
+- När en station når slutet börjar samma station om från början.

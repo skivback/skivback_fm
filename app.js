@@ -1,7 +1,6 @@
 "use strict";
 
 const SHARE_URL = "https://skivback.github.io/skivback_fm/";
-const PROGRESS_UPDATE_INTERVAL_MS = 500;
 const PLAY_ATTENTION_CLASS = "needs-play";
 const RANDOM_START_MARGIN_SECONDS = 120;
 const MINIMUM_DURATION_FOR_RANDOM_START_SECONDS = 300;
@@ -183,16 +182,11 @@ const stationLogoElement = selectElement("#station-logo");
 const playPauseButton = selectElement("#play-pause");
 const previousButton = selectElement("#previous");
 const nextButton = selectElement("#next");
-const progressSlider = selectElement("#progress");
-const currentTimeElement = selectElement("#current-time");
-const durationElement = selectElement("#duration");
 const volumeSlider = selectElement("#volume");
 const shareButton = selectElement("#share");
 
 let player;
 let currentStationIndex = getRandomStationIndex();
-let progressTimer;
-let userIsSeeking = false;
 let randomSeekAttempt = 0;
 let randomSeekPending = true;
 
@@ -209,19 +203,6 @@ function getLogoPath(logoFilename) {
 function setLogoImage(imageElement, logoFilename, altText = "") {
   imageElement.alt = altText;
   imageElement.src = getLogoPath(logoFilename);
-}
-
-function formatTime(seconds) {
-  if (!Number.isFinite(seconds) || seconds < 0) {
-    return "00:00";
-  }
-
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = Math.floor(seconds % 60);
-
-  return `${String(minutes).padStart(2, "0")}:${String(
-    remainingSeconds,
-  ).padStart(2, "0")}`;
 }
 
 function renderStationList() {
@@ -304,7 +285,6 @@ function seekToRandomPositionWhenAvailable() {
     const randomPosition = getRandomPlaybackPosition(totalSeconds);
     player.seekTo(randomPosition, true);
     randomSeekPending = false;
-    updateProgress();
     return;
   }
 
@@ -338,28 +318,9 @@ function loadStation(stationIndex) {
   });
 }
 
-function updateProgress() {
-  if (!player || userIsSeeking) {
-    return;
-  }
-
-  const elapsedSeconds = player.getCurrentTime?.() ?? 0;
-  const totalSeconds = player.getDuration?.() ?? 0;
-
-  currentTimeElement.textContent = formatTime(elapsedSeconds);
-  durationElement.textContent = formatTime(totalSeconds);
-  progressSlider.value =
-    totalSeconds > 0 ? String((elapsedSeconds / totalSeconds) * 100) : "0";
-}
-
 function handlePlayerReady(event) {
   event.target.setVolume(Number(volumeSlider.value));
   scheduleRandomSeek();
-
-  progressTimer = window.setInterval(
-    updateProgress,
-    PROGRESS_UPDATE_INTERVAL_MS,
-  );
 }
 
 function handlePlayerStateChange(event) {
@@ -372,8 +333,15 @@ function handlePlayerStateChange(event) {
   }
 
   if (event.data === YT.PlayerState.ENDED) {
-    loadStation(currentStationIndex + 1);
+    restartCurrentStationFromBeginning();
   }
+}
+
+function restartCurrentStationFromBeginning() {
+  randomSeekPending = false;
+  randomSeekAttempt = 0;
+  player?.seekTo?.(0, true);
+  player?.playVideo?.();
 }
 
 function handlePlayerError(event) {
@@ -411,25 +379,6 @@ function togglePlayback() {
   } else {
     player.playVideo();
   }
-}
-
-function handleProgressInput() {
-  userIsSeeking = true;
-
-  const totalSeconds = player?.getDuration?.() ?? 0;
-  const selectedSeconds =
-    (totalSeconds * Number(progressSlider.value)) / 100;
-
-  currentTimeElement.textContent = formatTime(selectedSeconds);
-}
-
-function handleProgressChange() {
-  const totalSeconds = player?.getDuration?.() ?? 0;
-  const selectedSeconds =
-    (totalSeconds * Number(progressSlider.value)) / 100;
-
-  player?.seekTo?.(selectedSeconds, true);
-  userIsSeeking = false;
 }
 
 function handleVolumeInput() {
@@ -485,8 +434,6 @@ nextButton.addEventListener("click", () => {
 });
 
 playPauseButton.addEventListener("click", togglePlayback);
-progressSlider.addEventListener("input", handleProgressInput);
-progressSlider.addEventListener("change", handleProgressChange);
 volumeSlider.addEventListener("input", handleVolumeInput);
 shareButton.addEventListener("click", shareSkivbackFm);
 
