@@ -28,3 +28,10 @@ Ladda upp innehållet i repositoryts rot och välj `main` samt `/ (root)` under 
 - ⏪ hoppar fem minuter bakåt i den aktuella stationen.
 - ⏩ hoppar fem minuter framåt i den aktuella stationen.
 - Station väljs från stationslistan.
+
+
+## v5.3
+- Nya rena dubbla chevrons för bakåt/framåt utan synlig tidsförklaring.
+- Knapparna hoppar fortsatt fem minuter i aktuell station.
+- Kortare, sammanhållen volymkontroll.
+- Mer balanserad kontrollrad och diskretare Play-glow.
