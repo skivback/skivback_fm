@@ -526,3 +526,57 @@
     box-shadow: 0 0 18px rgba(99, 233, 255, .35);
   }
 }
+
+
+/* v5.2 — combined volume control and five-minute seek buttons */
+.volume-control {
+  display: flex !important;
+  align-items: center;
+  gap: 10px;
+  width: min(100%, 360px) !important;
+}
+
+.volume-icon {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  fill: #8deeff;
+  filter: drop-shadow(0 0 6px rgba(99, 233, 255, .28));
+}
+
+.volume-control input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.controls button:not(.primary) {
+  font-size: 20px;
+  line-height: 1;
+}
+
+@media (max-width:700px) and (orientation:portrait) {
+  .volume-control {
+    width: 100% !important;
+    gap: 7px;
+  }
+
+  .volume-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .controls button:not(.primary) {
+    font-size: 17px;
+  }
+}
+
+@media (orientation:landscape) and (max-width:1100px) {
+  .volume-control {
+    width: 100% !important;
+  }
+
+  .volume-icon {
+    width: clamp(17px, 4vh, 22px);
+    height: clamp(17px, 4vh, 22px);
+  }
+}

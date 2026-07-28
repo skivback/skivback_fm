@@ -6,6 +6,7 @@ const RANDOM_START_MARGIN_SECONDS = 120;
 const MINIMUM_DURATION_FOR_RANDOM_START_SECONDS = 300;
 const RANDOM_SEEK_RETRY_INTERVAL_MS = 250;
 const RANDOM_SEEK_MAX_ATTEMPTS = 20;
+const SEEK_STEP_SECONDS = 5 * 60;
 
 const stations = [
   {
@@ -425,12 +426,30 @@ function resetShareButton() {
   shareButton.title = "Dela Skivback FM";
 }
 
+function seekWithinCurrentStation(offsetSeconds) {
+  if (!player || typeof player.getCurrentTime !== "function") {
+    return;
+  }
+
+  const currentTime = player.getCurrentTime() || 0;
+  const duration = player.getDuration?.() || 0;
+  const maximumTime = duration > 1 ? duration - 1 : currentTime + offsetSeconds;
+  const targetTime = Math.min(
+    Math.max(currentTime + offsetSeconds, 0),
+    maximumTime,
+  );
+
+  randomSeekPending = false;
+  randomSeekAttempt = 0;
+  player.seekTo(targetTime, true);
+}
+
 previousButton.addEventListener("click", () => {
-  loadStation(currentStationIndex - 1);
+  seekWithinCurrentStation(-SEEK_STEP_SECONDS);
 });
 
 nextButton.addEventListener("click", () => {
-  loadStation(currentStationIndex + 1);
+  seekWithinCurrentStation(SEEK_STEP_SECONDS);
 });
 
 playPauseButton.addEventListener("click", togglePlayback);

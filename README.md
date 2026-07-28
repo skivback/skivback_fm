@@ -21,3 +21,10 @@ Ladda upp innehållet i repositoryts rot och välj `main` samt `/ (root)` under 
 - Ingen tidsindikator eller spolningslist visas.
 - Varje vald station startar på en slumpmässig position.
 - När en station når slutet börjar samma station om från början.
+
+## Kontroller
+
+- Högtalarikonen och volymreglaget visas som en sammanhållen kontroll.
+- ⏪ hoppar fem minuter bakåt i den aktuella stationen.
+- ⏩ hoppar fem minuter framåt i den aktuella stationen.
+- Station väljs från stationslistan.

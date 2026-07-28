@@ -15,7 +15,7 @@
   <meta name="apple-mobile-web-app-title" content="Skivback FM" />
   <meta name="mobile-web-app-capable" content="yes" />
 
-  <link rel="stylesheet" href="style.css?v=5.1">
+  <link rel="stylesheet" href="style.css?v=5.2">
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -37,12 +37,17 @@
         <h1 id="current-station">BLUE ARK</h1>
         <p id="current-track">GTA RADIO — FULL STATION</p>
         <div class="controls">
-          <button id="previous" type="button" aria-label="Föregående station">◀◀</button>
+          <button id="previous" type="button" aria-label="Hoppa bakåt fem minuter" title="Bakåt 5 minuter">⏪</button>
           <button id="play-pause" class="primary" type="button">PLAY</button>
-          <button id="next" type="button" aria-label="Nästa station">▶▶</button>
+          <button id="next" type="button" aria-label="Hoppa framåt fem minuter" title="Framåt 5 minuter">⏩</button>
         </div>
         <div class="secondary-controls">
-          <label><span>VOL</span><input id="volume" aria-label="Volym" type="range" min="0" max="100" value="70"></label>
+          <label class="volume-control">
+            <svg class="volume-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 9v6h4l5 4V5L8 9H4Zm11.5 3a3.5 3.5 0 0 0-1.5-2.87v5.74A3.5 3.5 0 0 0 15.5 12Zm0-7.1v2.06a6 6 0 0 1 0 10.08v2.06a8 8 0 0 0 0-14.2Z"/>
+            </svg>
+            <input id="volume" aria-label="Volym" type="range" min="0" max="100" value="70">
+          </label>
         </div>
         <div class="share-row">
           <button id="share" class="share-button" type="button" aria-label="Dela Skivback FM" title="Dela Skivback FM">
@@ -54,6 +59,6 @@
   </main>
   <div class="youtube-audio" aria-hidden="true"><div id="youtube-player"></div></div>
   <script src="https://www.youtube.com/iframe_api"></script>
-  <script src="app.js?v=5.1"></script>
+  <script src="app.js?v=5.2"></script>
 </body>
 </html>
