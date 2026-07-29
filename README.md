@@ -40,3 +40,13 @@ Ladda upp innehållet i repositoryts rot och välj `main` samt `/ (root)` under 
 ## v5.4
 - Egna inline-SVG-pilar för bakåt/framåt, utan emoji eller webbläsarens native mediaikoner.
 - Cache-busting för CSS och JavaScript.
+
+## Dela en station
+
+Dela-knappen skapar nu en direktlänk till den valda stationen, till exempel:
+
+```text
+https://skivback.github.io/skivback_fm/?station=blue-ark
+```
+
+När länken öppnas väljs stationen automatiskt. Uppspelningen startar fortfarande på en slumpmässig plats efter att användaren tryckt på Play.

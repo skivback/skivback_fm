@@ -1,6 +1,7 @@
 "use strict";
 
-const SHARE_URL = "https://skivback.github.io/skivback_fm/";
+const APP_URL = "https://skivback.github.io/skivback_fm/";
+const STATION_QUERY_PARAMETER = "station";
 const PLAY_ATTENTION_CLASS = "needs-play";
 const RANDOM_START_MARGIN_SECONDS = 120;
 const MINIMUM_DURATION_FOR_RANDOM_START_SECONDS = 300;
@@ -12,6 +13,7 @@ const stations = [
   {
     index: 1,
     name: "SPACE 103.2",
+    slug: "space-103-2",
     frequency: "103.2",
     videoId: "6TnV43UWoqk",
     startSeconds: 3,
@@ -20,6 +22,7 @@ const stations = [
   {
     index: 2,
     name: "NON-STOP-POP FM",
+    slug: "non-stop-pop-fm",
     frequency: "100.1",
     videoId: "Fjp0wu3lEHk",
     logo: "non-stop-pop-fm.png",
@@ -27,6 +30,7 @@ const stations = [
   {
     index: 3,
     name: "RADIO LOS SANTOS",
+    slug: "radio-los-santos",
     frequency: "106.1",
     videoId: "C3_FSXZtRe8",
     logo: "radio-los-santos.png",
@@ -34,6 +38,7 @@ const stations = [
   {
     index: 4,
     name: "WEST COAST CLASSICS",
+    slug: "west-coast-classics",
     frequency: "95.6",
     videoId: "z0Wf3IuZnf0",
     logo: "west-coast-classics.webp",
@@ -41,6 +46,7 @@ const stations = [
   {
     index: 5,
     name: "REBEL RADIO",
+    slug: "rebel-radio",
     frequency: "89.5",
     videoId: "HeLsaX1I5B4",
     logo: "rebel-radio.webp",
@@ -48,6 +54,7 @@ const stations = [
   {
     index: 6,
     name: "THE LOWDOWN 91.1",
+    slug: "the-lowdown-91-1",
     frequency: "91.1",
     videoId: "RT9h-C24idQ",
     logo: "the-lowdown.webp",
@@ -55,6 +62,7 @@ const stations = [
   {
     index: 7,
     name: "BLUE ARK",
+    slug: "blue-ark",
     frequency: "94.7",
     videoId: "LRdjhqMYSGg",
     logo: "the-blue-ark.png",
@@ -62,6 +70,7 @@ const stations = [
   {
     index: 8,
     name: "WORLDWIDE FM",
+    slug: "worldwide-fm",
     frequency: "96.5",
     videoId: "GgIB2WClkwY",
     logo: "worldwide-fm.png",
@@ -69,6 +78,7 @@ const stations = [
   {
     index: 9,
     name: "EAST LOS FM",
+    slug: "east-los-fm",
     frequency: "106.2",
     videoId: "xTpsoTmhdNc",
     logo: "east-los-fm.png",
@@ -76,6 +86,7 @@ const stations = [
   {
     index: 10,
     name: "CHANNEL X",
+    slug: "channel-x",
     frequency: "99.1",
     videoId: "HHG44PJ0oyo",
     logo: "channel-x.png",
@@ -83,6 +94,7 @@ const stations = [
   {
     index: 11,
     name: "RADIO MIRROR PARK",
+    slug: "radio-mirror-park",
     frequency: "88.9",
     videoId: "SDWHIACuuaQ",
     logo: "radio-mirror-park.webp",
@@ -90,6 +102,7 @@ const stations = [
   {
     index: 12,
     name: "SOULWAX FM",
+    slug: "soulwax-fm",
     frequency: "93.7",
     videoId: "EhsQZl8BFz8",
     logo: "soulwax-fm.jpg",
@@ -97,6 +110,7 @@ const stations = [
   {
     index: 13,
     name: "FLYLO FM",
+    slug: "flylo-fm",
     frequency: "98.3",
     videoId: "3P-ux63rHkU",
     logo: "fly-lo-fm.png",
@@ -104,6 +118,7 @@ const stations = [
   {
     index: 14,
     name: "VINEWOOD BOULEVARD RADIO",
+    slug: "vinewood-boulevard-radio",
     frequency: "101.5",
     videoId: "5fnGyUc2eFs",
     logo: "vinewood-boulevard-radio.webp",
@@ -111,6 +126,7 @@ const stations = [
   {
     index: 15,
     name: "LOS SANTOS ROCK RADIO",
+    slug: "los-santos-rock-radio",
     frequency: "102.3",
     videoId: "Xy75nA56vcc",
     logo: "los-santos-rock-radio.png",
@@ -118,6 +134,7 @@ const stations = [
   {
     index: 16,
     name: "LOS SANTOS UNDERGROUND RADIO",
+    slug: "los-santos-underground-radio",
     frequency: "90.3",
     videoId: "9cL6IDCtuzs",
     logo: "los-santos-underground-radio.png",
@@ -125,6 +142,7 @@ const stations = [
   {
     index: 17,
     name: "iFRUIT RADIO",
+    slug: "ifruit-radio",
     frequency: "107.9",
     videoId: "P3qixldzDow",
     logo: "ifruit-radio.webp",
@@ -132,6 +150,7 @@ const stations = [
   {
     index: 18,
     name: "KULT FM",
+    slug: "kult-fm",
     frequency: "99.1",
     videoId: "I2Xjuz-mnN0",
     logo: "kult-fm.webp",
@@ -139,6 +158,7 @@ const stations = [
   {
     index: 19,
     name: "STILL SLIPPING LOS SANTOS",
+    slug: "still-slipping-los-santos",
     frequency: "96.2",
     videoId: "fpvJaphZ2_g",
     logo: "still-slipping-los-santos.png",
@@ -146,6 +166,7 @@ const stations = [
   {
     index: 20,
     name: "THE MUSIC LOCKER",
+    slug: "the-music-locker",
     frequency: "102.8",
     videoId: "dBvMBYbUZFc",
     logo: "music-locker-radio.png",
@@ -153,6 +174,7 @@ const stations = [
   {
     index: 21,
     name: "MEDIA PLAYER",
+    slug: "media-player",
     frequency: "88.1",
     videoId: "dPkzYz-AYOs",
     logo: "media-player.png",
@@ -160,6 +182,7 @@ const stations = [
   {
     index: 22,
     name: "MOTOMAMI LOS SANTOS",
+    slug: "motomami-los-santos",
     frequency: "94.4",
     videoId: "30uA_Hppzpc",
     logo: "motomami.png",
@@ -167,6 +190,7 @@ const stations = [
   {
     index: 23,
     name: "BLONDED LOS SANTOS",
+    slug: "blonded-los-santos",
     frequency: "97.8",
     videoId: "-tVumJBaTWY",
     logo: "blonded-los-santos.webp",
@@ -187,7 +211,7 @@ const volumeSlider = selectElement("#volume");
 const shareButton = selectElement("#share");
 
 let player;
-let currentStationIndex = getRandomStationIndex();
+let currentStationIndex = getInitialStationIndex();
 let randomSeekAttempt = 0;
 let randomSeekPending = true;
 
@@ -195,6 +219,40 @@ playPauseButton.classList.add(PLAY_ATTENTION_CLASS);
 
 function getRandomStationIndex() {
   return Math.floor(Math.random() * stations.length);
+}
+
+function getInitialStationIndex() {
+  const stationSlug = new URLSearchParams(window.location.search).get(
+    STATION_QUERY_PARAMETER,
+  );
+
+  if (!stationSlug) {
+    return getRandomStationIndex();
+  }
+
+  const stationIndex = stations.findIndex(
+    (station) => station.slug === stationSlug.toLowerCase(),
+  );
+
+  return stationIndex >= 0 ? stationIndex : getRandomStationIndex();
+}
+
+function getStationShareUrl(station = stations[currentStationIndex]) {
+  const url = new URL(APP_URL);
+  url.searchParams.set(STATION_QUERY_PARAMETER, station.slug);
+  return url.toString();
+}
+
+function updateStationUrl() {
+  const station = stations[currentStationIndex];
+  const currentUrl = new URL(window.location.href);
+  currentUrl.searchParams.set(STATION_QUERY_PARAMETER, station.slug);
+
+  window.history.replaceState(
+    { station: station.slug },
+    "",
+    currentUrl,
+  );
 }
 
 function getLogoPath(logoFilename) {
@@ -223,7 +281,7 @@ function renderStationList() {
     stationName.textContent = station.name;
 
     button.append(logoImage, stationName);
-    button.addEventListener("click", () => loadStation(stationIndex));
+    button.addEventListener("click", () => loadStation(stationIndex, { updateUrl: true }));
 
     stationList.appendChild(button);
   });
@@ -253,6 +311,8 @@ function updateActiveStation() {
   setLogoImage(stationLogoElement, station.logo, station.name);
 
   document.title = `${station.name} · Skivback FM`;
+  shareButton.setAttribute("aria-label", `Dela ${station.name}`);
+  shareButton.title = `Dela ${station.name}`;
 }
 
 function getRandomPlaybackPosition(totalSeconds) {
@@ -299,12 +359,16 @@ function seekToRandomPositionWhenAvailable() {
   }
 }
 
-function loadStation(stationIndex) {
+function loadStation(stationIndex, { updateUrl = false } = {}) {
   currentStationIndex =
     (stationIndex + stations.length) % stations.length;
 
   const station = stations[currentStationIndex];
   updateActiveStation();
+
+  if (updateUrl) {
+    updateStationUrl();
+  }
 
   if (!player || typeof player.loadVideoById !== "function") {
     return;
@@ -392,26 +456,29 @@ function handleVolumeInput() {
 }
 
 async function shareSkivbackFm() {
+  const station = stations[currentStationIndex];
+  const shareUrl = getStationShareUrl(station);
+
   try {
     if (navigator.share) {
       await navigator.share({
-        title: "Skivback FM",
-        text: "Lyssna på Skivback FM",
-        url: SHARE_URL,
+        title: `${station.name} · Skivback FM`,
+        text: `Lyssna på ${station.name} i Skivback FM`,
+        url: shareUrl,
       });
       return;
     }
 
-    await copyShareUrl();
+    await copyShareUrl(shareUrl);
   } catch (error) {
     if (error?.name !== "AbortError") {
-      window.prompt("Kopiera länken:", SHARE_URL);
+      window.prompt("Kopiera länken:", shareUrl);
     }
   }
 }
 
-async function copyShareUrl() {
-  await navigator.clipboard.writeText(SHARE_URL);
+async function copyShareUrl(shareUrl) {
+  await navigator.clipboard.writeText(shareUrl);
 
   shareButton.classList.add("copied");
   shareButton.setAttribute("aria-label", "Länken kopierad");
@@ -422,8 +489,9 @@ async function copyShareUrl() {
 
 function resetShareButton() {
   shareButton.classList.remove("copied");
-  shareButton.setAttribute("aria-label", "Dela Skivback FM");
-  shareButton.title = "Dela Skivback FM";
+  const station = stations[currentStationIndex];
+  shareButton.setAttribute("aria-label", `Dela ${station.name}`);
+  shareButton.title = `Dela ${station.name}`;
 }
 
 function seekWithinCurrentStation(offsetSeconds) {
@@ -457,4 +525,13 @@ volumeSlider.addEventListener("input", handleVolumeInput);
 shareButton.addEventListener("click", shareSkivbackFm);
 
 
+window.addEventListener("popstate", () => {
+  const stationIndex = getInitialStationIndex();
+
+  if (stationIndex !== currentStationIndex) {
+    loadStation(stationIndex);
+  }
+});
+
 renderStationList();
+updateStationUrl();
