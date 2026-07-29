@@ -1,7 +1,12 @@
 # Skivback FM
+
 <img width="1680" height="954" alt="image" src="https://github.com/user-attachments/assets/e990d3e6-ec97-4cee-9a1b-7f0ef642c301" />
 
 <img width="333" height="222" alt="Skivback FM i landscape-läge" src="https://github.com/user-attachments/assets/74eeadb5-ecf5-435f-b0df-aa32ce94a351" />
+
+## Enkelt att lyssna
+
+![Enkelt med Skivback FM jämfört med server- och inloggningskrångel](assets/readme/enkelt-vs-omstandligt.png)
 
 - Kör appen här: https://skivback.github.io/skivback_fm/
 - En statisk, mobilanpassad och GTA-inspirerad radiospelare som använder YouTube IFrame Player API för ljuduppspelning.
@@ -16,7 +21,6 @@ Ladda upp innehållet i repositoryts rot och välj `main` samt `/ (root)` under 
 
 Öppna sidan i Safari, tryck på **Dela** och välj **Lägg till på hemskärmen**. När appen startas från ikonen öppnas den utan Safaris adressfält, med mörk bakgrund och ett statusfält som smälter in i designen.
 
-
 ## Radiobeteende
 
 - Ingen tidsindikator eller spolningslist visas.
@@ -30,15 +34,12 @@ Ladda upp innehållet i repositoryts rot och välj `main` samt `/ (root)` under 
 - ⏩ hoppar fem minuter framåt i den aktuella stationen.
 - Station väljs från stationslistan.
 
-
 ## v5.4
+
 - Nya rena dubbla chevrons för bakåt/framåt utan synlig tidsförklaring.
 - Knapparna hoppar fortsatt fem minuter i aktuell station.
 - Kortare, sammanhållen volymkontroll.
 - Mer balanserad kontrollrad och diskretare Play-glow.
-
-
-## v5.4
 - Egna inline-SVG-pilar för bakåt/framåt, utan emoji eller webbläsarens native mediaikoner.
 - Cache-busting för CSS och JavaScript.
 
