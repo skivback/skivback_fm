@@ -2,6 +2,7 @@
 
 const APP_URL = "https://skivback.github.io/skivback_fm/";
 const STATION_QUERY_PARAMETER = "station";
+const TIME_QUERY_PARAMETER = "t";
 const PLAY_ATTENTION_CLASS = "needs-play";
 const RANDOM_START_MARGIN_SECONDS = 120;
 const MINIMUM_DURATION_FOR_RANDOM_START_SECONDS = 300;
@@ -214,6 +215,7 @@ let player;
 let currentStationIndex = getInitialStationIndex();
 let randomSeekAttempt = 0;
 let randomSeekPending = true;
+let sharedStartSeconds = getSharedStartSeconds();
 
 playPauseButton.classList.add(PLAY_ATTENTION_CLASS);
 
@@ -237,9 +239,24 @@ function getInitialStationIndex() {
   return stationIndex >= 0 ? stationIndex : getRandomStationIndex();
 }
 
+function getSharedStartSeconds() {
+  const rawTime = new URLSearchParams(window.location.search).get(
+    TIME_QUERY_PARAMETER,
+  );
+  const parsedTime = Number.parseInt(rawTime ?? "", 10);
+
+  return Number.isFinite(parsedTime) && parsedTime >= 0 ? parsedTime : null;
+}
+
 function getStationShareUrl(station = stations[currentStationIndex]) {
   const url = new URL(APP_URL);
   url.searchParams.set(STATION_QUERY_PARAMETER, station.slug);
+
+  const currentTime = Math.floor(player?.getCurrentTime?.() ?? 0);
+  if (currentTime >= 0) {
+    url.searchParams.set(TIME_QUERY_PARAMETER, String(currentTime));
+  }
+
   return url.toString();
 }
 
@@ -247,6 +264,7 @@ function updateStationUrl() {
   const station = stations[currentStationIndex];
   const currentUrl = new URL(window.location.href);
   currentUrl.searchParams.set(STATION_QUERY_PARAMETER, station.slug);
+  currentUrl.searchParams.delete(TIME_QUERY_PARAMETER);
 
   window.history.replaceState(
     { station: station.slug },
@@ -374,6 +392,7 @@ function loadStation(stationIndex, { updateUrl = false } = {}) {
     return;
   }
 
+  sharedStartSeconds = null;
   randomSeekPending = true;
   randomSeekAttempt = 0;
 
@@ -385,6 +404,14 @@ function loadStation(stationIndex, { updateUrl = false } = {}) {
 
 function handlePlayerReady(event) {
   event.target.setVolume(Number(volumeSlider.value));
+
+  if (sharedStartSeconds !== null) {
+    randomSeekPending = false;
+    randomSeekAttempt = 0;
+    event.target.seekTo(sharedStartSeconds, true);
+    return;
+  }
+
   scheduleRandomSeek();
 }
 
@@ -393,7 +420,10 @@ function handlePlayerStateChange(event) {
   playPauseButton.textContent = isPlaying ? "PAUSE" : "PLAY";
   playPauseButton.classList.toggle(PLAY_ATTENTION_CLASS, !isPlaying);
 
-  if (randomSeekPending) {
+  if (sharedStartSeconds !== null) {
+    event.target.seekTo(sharedStartSeconds, true);
+    sharedStartSeconds = null;
+  } else if (randomSeekPending) {
     seekToRandomPositionWhenAvailable();
   }
 
