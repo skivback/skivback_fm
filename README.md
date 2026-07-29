@@ -30,8 +30,13 @@ Ladda upp innehållet i repositoryts rot och välj `main` samt `/ (root)` under 
 - Station väljs från stationslistan.
 
 
-## v5.3
+## v5.4
 - Nya rena dubbla chevrons för bakåt/framåt utan synlig tidsförklaring.
 - Knapparna hoppar fortsatt fem minuter i aktuell station.
 - Kortare, sammanhållen volymkontroll.
 - Mer balanserad kontrollrad och diskretare Play-glow.
+
+
+## v5.4
+- Egna inline-SVG-pilar för bakåt/framåt, utan emoji eller webbläsarens native mediaikoner.
+- Cache-busting för CSS och JavaScript.
