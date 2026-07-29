@@ -1,4 +1,5 @@
 # Skivback FM
+<img width="1680" height="954" alt="image" src="https://github.com/user-attachments/assets/e990d3e6-ec97-4cee-9a1b-7f0ef642c301" />
 
 <img width="333" height="222" alt="Skivback FM i landscape-läge" src="https://github.com/user-attachments/assets/74eeadb5-ecf5-435f-b0df-aa32ce94a351" />
 
